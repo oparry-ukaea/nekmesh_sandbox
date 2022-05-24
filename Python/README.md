@@ -27,9 +27,12 @@ N.B. You could also install NekPy at a user or system level; see the [Nektar use
 ### Mesh generation (gen_mesh.py)
 gen_mesh.py uses NekPy to generate simple 2D triangular or quadrilateral meshes.
 It was adapted from [this](https://gitlab.nektar.info/nektar/nektar/-/tree/master/library/Demos/Python/NekMesh/StructuredGrid.py) Nektar example.
+
+To use it, run
 ```
 . env/bin/activate
-python gen_mesh.py [nx] [ny] [lx] [rx] [ly] [ry]
+python gen_mesh.py [nx] [ny] [lx] [ly] [ux] [uy] [shape]
 ```
+where `nx`,`ny` are the number of vertices in each direction; `lx`,`ly`,`ux`,`uy` are the lower and upper bounds in x and y respectively; and `shape` is one of 'Tri' or 'Quad'.
 
 Mesh files are generated in ./output.
