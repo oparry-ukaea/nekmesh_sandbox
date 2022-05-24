@@ -3,14 +3,14 @@ This directory contains Python scripts intended to demonstrate `NekPy` functiona
 
 ## Installing dependencies
 ### Nektar
-To use NekPy, Nektar needs to have been built and installed with the `BUILD_PYTHON` CMake flag turned on.
-Turning off solver builds is also strongly recommended will speed things up significantly. There are [full instructions](https://doc.nektar.info/userguide/latest/user-guidese3.html#x7-60001.3) on the Nektar website, but the below should be sufficient in linux or WSL:
+To use NekPy, Nektar needs to have been built and installed with the `NEKTAR_BUILD_PYTHON` CMake flag turned on.
+There are [full instructions](https://doc.nektar.info/userguide/latest/user-guidese3.html#x7-60001.3) on the Nektar website, but the below can be used as starting point in linux or WSL:
 
 ```bash
 git clone https://gitlab.nektar.info/nektar/nektar
 cd nektar
 mkdir build && cd build
-cmake .. 
+cmake -DNEKTAR_BUILD_PYTHON=ON -DNEKTAR_BUILD_SOLVERS=OFF ..
 cmake --build .
 make install
 ```
