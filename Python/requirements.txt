@@ -1,0 +1,2 @@
+NEKPY_PATH
+numpy
