@@ -6,4 +6,4 @@ Current content is:
 - ./Python (NekPy examples)
     - gen_mesh.py: Generate simple 2D meshes
 - ./Cpp (NekMesh examples)
-    - None yet
+    - ReadXMLMesh: Read a mesh file in Nektar's standard (compressed or uncompressed) XML format
