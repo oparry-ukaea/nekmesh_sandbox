@@ -112,8 +112,9 @@ NekMesh.Module.Register(NekMesh.ModuleType.Input, "StructuredGrid", StructuredGr
 #==================================================================================================
 # Convenience functions for handling options
     
-def outfile_name_from_opts(opts):
-    return "output/%sx%s_grid.xml" % (opts["nx"],opts["ny"])
+def outfile_name_from_opts(opts,compressed):
+    comp_str = "_compressed" if compressed else ""
+    return "output/%sx%s_grid%s.xml" % (opts["nx"],opts["ny"],comp_str)
     
 def validate_opts(opts):
     assert opts["ux"] > opts["lx"], "ux [%s] must be > lx [%s]" % (opts["ux"],opts["lx"])
@@ -121,16 +122,24 @@ def validate_opts(opts):
 
 #==================================================================================================
 if __name__ == '__main__':
-    # Fixed composite ID and compression mode for now
+    # Fixed composite ID for now
     fixed_comp_id="2"
-    uncompress=True
 
-    # Process CL args
-    if len(sys.argv) == 8:
-        opts=dict(nx=sys.argv[1], ny=sys.argv[2],
-                    lx=sys.argv[3], ly=sys.argv[4],
-                    ux=sys.argv[5], uy=sys.argv[6],
-                    compid = fixed_comp_id, shape = sys.argv[7])
+    CLargs = list(sys.argv[1:])
+
+    # Turn on compression if requested
+    compressed=False
+    for cflag in ["--compress","-c"]:
+        if cflag in CLargs:
+            CLargs.remove(cflag)
+            compressed=True   
+
+    # Process remaining CL args
+    if len(CLargs) == 7:
+        opts=dict(nx=CLargs[0], ny=CLargs[1],
+                    lx=CLargs[2], ly=CLargs[3],
+                    ux=CLargs[4], uy=CLargs[5],
+                    compid = fixed_comp_id, shape = CLargs[6])
     else:
         print("Usage:")
         print(" gen_mesh.py nx ny lx ly ux uy shape")
@@ -144,7 +153,7 @@ if __name__ == '__main__':
     print("Options are:")
     print(opts)
 
-    outfile = outfile_name_from_opts(opts)
+    outfile = outfile_name_from_opts(opts,compressed)
 
     # Instantiate mesh object
     mesh = NekMesh.Mesh()
@@ -155,5 +164,9 @@ if __name__ == '__main__':
     # Ensure there are no negative Jacobians
     NekMesh.ProcessModule.Create("jac", mesh, list=True).Process()
     
+    output_kws=dict(test=True)
+    if not compressed:
+        output_kws["uncompress"] = True
     # Finally, output the mesh file (includes testing it inside Nektar++ first)
+    NekMesh.OutputModule.Create("xml", mesh, outfile, **output_kws).Process()
     print("Mesh written to %s" % outfile)
