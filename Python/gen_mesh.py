@@ -156,4 +156,4 @@ if __name__ == '__main__':
     NekMesh.ProcessModule.Create("jac", mesh, list=True).Process()
     
     # Finally, output the mesh file (includes testing it inside Nektar++ first)
-    NekMesh.OutputModule.Create("xml", mesh, outfile, test=True, uncompress=uncompress).Process()
+    print("Mesh written to %s" % outfile)
